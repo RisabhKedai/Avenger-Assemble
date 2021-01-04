@@ -1,5 +1,6 @@
 import sys
 import pygame
+from pygame import mixer
 from bullets import Bullet
 from thanos import Thanos
 from time import sleep
@@ -60,6 +61,9 @@ def fire_bull(bullets,settings,screen,iron):
     if len(bullets)<settings.allowed:
         new_bull=Bullet(settings,screen,iron)
         bullets.add(new_bull)
+        mixer.init()
+        mixer.music.load("data/car_door.wav")
+        mixer.music.play()
 
 def updat_scr(sett,screen,ironman,bullets,thanos,stats,play_butt,intro,score):
     screen.fill(sett.bg)
@@ -91,6 +95,9 @@ def chek_bull_than_collisn(setting,screen,ironman,thanoss,bullets,stats,score):
     #if so remove the bullet and thanos
     collision=pygame.sprite.groupcollide(bullets,thanoss,True,True)
     if collision:
+        mixer.init()
+        mixer.music.load("data/whiff.wav")
+        mixer.music.play()
         for than in collision.values():
             stats.score+=setting.point*len(than)
             score.prep_score()
@@ -187,6 +194,11 @@ def iron_hit(setting,stats,screen,ironman,thanoss,bullets,score):
     if stats.iron_life>0:
         #decreasing ironmans battery source left
         stats.iron_life-=1
+
+        # play boom sound 
+        mixer.init()
+        mixer.music.load("data/boom.wav")
+        mixer.music.play()
 
         #update the scoreboard
         score.prep_iron()
